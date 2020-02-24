@@ -24,7 +24,7 @@ class Database {
   }
 
   mongo() {
-    this.mongo = mongoose.connect('mongodb://192.168.99.100:27018/gobarber', {
+    this.mongo = mongoose.connect(process.env.MONGO_URL, {
       useNewUrlParser: true,
       useFindAndModify: true,
       useUnifiedTopology: true,
