@@ -11,9 +11,9 @@ class Queue {
   }
 
   init() {
+    /* instancia que conecta o banco de dados redis */
     jobs.forEach(({ key, handle }) => {
       this.queues[key] = {
-        /* instancia que conecta o banco de dados redis */
         bee: new Bee(key, {
           redis: redisConfig,
         }),
@@ -30,8 +30,12 @@ class Queue {
     jobs.forEach(job => {
       const { bee, handle } = this.queues[job.key];
 
-      bee.process(handle);
+      bee.on('failed', this.handleFailure).process(handle);
     });
+  }
+
+  handleFailure(job, err) {
+    console.log(`Queue ${job.queue.name}: FAILED`, err);
   }
 }
 
